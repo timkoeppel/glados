@@ -22,7 +22,7 @@ import random
 from time import strftime
 
 #convert text to speech
-def sofiaResponse(audio):
+def GLaDOS(audio):
     "speaks audio passed as argument"
     print(audio)
     for line in audio.splitlines():
@@ -56,9 +56,9 @@ def assistant(command):
             subreddit = reg_ex.group(1)
             url = url + 'r/' + subreddit
         webbrowser.open(url)
-        sofiaResponse('The Reddit content has been opened for you Sir.')
+        GLaDOS('The Reddit content has been opened for you Sir.')
     elif 'shutdown' in command:
-        sofiaResponse('Bye bye Sir. Have a nice day')
+        GLaDOS('Bye bye Sir. Have a nice day')
         sys.exit()
 
 #open website
@@ -69,7 +69,7 @@ def assistant(command):
             print(domain)
             url = 'https://www.' + domain
             webbrowser.open(url)
-            sofiaResponse('The website you have requested has been opened for you Sir.')
+            GLaDOS('The website you have requested has been opened for you Sir.')
         else:
             pass
 
@@ -79,13 +79,13 @@ def assistant(command):
     elif 'hello' in command:
         day_time = int(strftime('%H'))
         if day_time < 12:
-            sofiaResponse('Hello Sir. Good morning')
+            GLaDOS('Hello Sir. Good morning')
         elif 12 <= day_time < 18:
-            sofiaResponse('Hello Sir. Good afternoon')
+            GLaDOS('Hello Sir. Good afternoon')
         else:
-            sofiaResponse('Hello Sir. Good evening')
+            GLaDOS('Hello Sir. Good evening')
         #elif 'help me' in command:
-        #sofiaResponse("""
+        #GLaDOS("""
         #You can use these commands and I'll help you out:1. Open reddit subreddit : Opens the subreddit in default browser.
     #    2. Open xyz.com : replace xyz with any website name
     #    3. Send email/email : Follow up questions such as recipient name, content will be asked in order.
@@ -106,9 +106,9 @@ def assistant(command):
                 'https://icanhazdadjoke.com/',
                 headers={"Accept":"application/json"})
         if res.status_code == requests.codes.ok:
-            sofiaResponse(str(res.json()['joke']))
+            GLaDOS(str(res.json()['joke']))
         else:
-            sofiaResponse('oops!I ran out of jokes')
+            GLaDOS('oops!I ran out of jokes')
 
 
 
@@ -122,7 +122,7 @@ def assistant(command):
             soup_page=soup(xml_page,"xml")
             news_list=soup_page.findAll("item")
             for news in news_list[:15]:
-                sofiaResponse(news.title.text.encode('utf-8'))
+                GLaDOS(news.title.text.encode('utf-8'))
         except Exception as e:
                 print(e)
 
@@ -138,7 +138,7 @@ def assistant(command):
             w = obs.get_weather()
             k = w.get_status()
             x = w.get_temperature(unit='celsius')
-            sofiaResponse('Current weather in %s is %s. The maximum temperature is %0.2f and the minimum temperature is %0.2f degree celcius' % (city, k, x['temp_max'], x['temp_min']))
+            GLaDOS('Current weather in %s is %s. The maximum temperature is %0.2f and the minimum temperature is %0.2f degree celcius' % (city, k, x['temp_max'], x['temp_min']))
 
 
 
@@ -146,13 +146,13 @@ def assistant(command):
     elif 'time' in command:
         import datetime
         now = datetime.datetime.now()
-        sofiaResponse('Current time is %d hours %d minutes' % (now.hour, now.minute))
+        GLaDOS('Current time is %d hours %d minutes' % (now.hour, now.minute))
 
     elif 'email' in command:
-        sofiaResponse('Who is the recipient?')
+        GLaDOS('Who is the recipient?')
         recipient = myCommand()
         if 'rajat' in recipient:
-            sofiaResponse('What should I say to him?')
+            GLaDOS('What should I say to him?')
             content = myCommand()
             mail = smtplib.SMTP('smtp.gmail.com', 587)
             mail.ehlo()
@@ -160,9 +160,9 @@ def assistant(command):
             mail.login('your_email_address', 'your_password')
             mail.sendmail('sender_email', 'receiver_email', content)
             mail.close()
-            sofiaResponse('Email has been sent successfuly. You can check your inbox.')
+            GLaDOS('Email has been sent successfuly. You can check your inbox.')
         else:
-            sofiaResponse('I don\'t know what you mean!')
+            GLaDOS('I don\'t know what you mean!')
 
 
 #launch any application
@@ -173,7 +173,7 @@ def assistant(command):
             appname1 = appname+".app"
             subprocess.Popen(["open", "-n", "/Applications/" + appname1], stdout=subprocess.PIPE)
 
-            sofiaResponse('I have launched the desired application')
+            GLaDOS('I have launched the desired application')
 
 
 #play youtube song
@@ -188,7 +188,7 @@ def assistant(command):
 #            except Exception as e:
 #                print(e)
 
-#    sofiaResponse('What song shall I play Sir?')
+#    GLaDOS('What song shall I play Sir?')
 #        mysong = myCommand()
 #        if mysong:
 #            flag = 0
@@ -206,7 +206,7 @@ def assistant(command):
 #            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 #                ydl.download([url])
 #            vlc.play(path)if flag == 0:
-#                sofiaResponse('I have not found anything in Youtube ')
+#                GLaDOS('I have not found anything in Youtube ')
 
 #change wallpaper
 #    elif 'change wallpaper' in command:
@@ -232,7 +232,7 @@ def assistant(command):
     #    photo = parsed_json['urls']['full']
     #    urllib.urlretrieve(photo, "/Users/nageshsinghchauhan/Documents/wallpaper/a") # Location where we download the image to.
     #    subprocess.call(["killall Dock"], shell=True)
-    #    sofiaResponse('wallpaper changed successfully')
+    #    GLaDOS('wallpaper changed successfully')
 
 #askme anything
     elif 'tell me about' in command:
@@ -241,11 +241,11 @@ def assistant(command):
             if reg_ex:
                 topic = reg_ex.group(1)
                 ny = wikipedia.page(topic)
-                sofiaResponse(ny.content[:500].encode('utf-8'))
+                GLaDOS(ny.content[:500].encode('utf-8'))
         except Exception as e:
                 print(e)
-                sofiaResponse(e)
-                sofiaResponse('Hi User, I am Sofia and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
+                GLaDOS(e)
+                GLaDOS('Hi User, I am Sofia and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
 
 #loop to continue executing multiple commands
 while True:
