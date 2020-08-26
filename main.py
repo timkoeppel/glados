@@ -13,14 +13,11 @@ import subprocess
 from pyowm import OWM
 import youtube_dl
 #import vlc
-#import urllib
-#import urllib2
 import urllib.request
 import json
 from bs4 import BeautifulSoup as soup
-#from urllib2 import urlopen
 from urllib.request import urlopen
-#import wikipedia
+import wikipedia
 import random
 from time import strftime
 
@@ -192,36 +189,36 @@ def assistant(command):
 
 
 #play youtube song
-#    elif 'play me a song' in command:
-#        path = '~/Documents/videos/'
-#        folder = path
-#        for the_file in os.listdir(folder):
-#            file_path = os.path.join(folder, the_file)
-#            try:
-#                if os.path.isfile(file_path):
-#                    os.unlink(file_path)
-#            except Exception as e:
-#                print(e)
+    #elif 'play me a song' in command:
+    #    path = '~/Documents/videos/'
+    #    folder = path
+    #    for the_file in os.listdir(folder):
+        #    file_path = os.path.join(folder, the_file)
+        #    try:
+        #        if os.path.isfile(file_path):
+        #            os.unlink(file_path)
+        #    except Exception as e:
+        #        print(e)
 
-#    GLaDOS('What song shall I play Sir?')
-#        mysong = myCommand()
-#        if mysong:
-#            flag = 0
-#            url = "https://www.youtube.com/results?search_query=" + mysong.replace(' ', '+')
-#            response = urlopen(url)
-#            html = response.read()
-#            soup1 = soup(html,"lxml")
-#            url_list = []
-#            for vid in soup1.findAll(attrs={'class':'yt-uix-tile-link'}):
-#                if ('https://www.youtube.com' + vid['href']).startswith("https://www.youtube.com/watch?v="):
-#                    flag = 1
-#                    final_url = 'https://www.youtube.com' + vid['href']
-#                    url_list.append(final_url)url = url_list[0]
-#            ydl_opts = {}os.chdir(path)
-#            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-#                ydl.download([url])
-#            vlc.play(path)if flag == 0:
-#                GLaDOS('I have not found anything in Youtube ')
+    #GLaDOS('What song shall I play Sir?')
+        #mysong = myCommand()
+        #if mysong:
+        #    flag = 0
+        #    url = "https://www.youtube.com/results?search_query=" + mysong.replace(' ', '+')
+        #    response = urlopen(url)
+        #    html = response.read()
+        #    soup1 = soup(html,"lxml")
+        #    url_list = []
+        #    for vid in soup1.findAll(attrs={'class':'yt-uix-tile-link'}):
+        #        if ('https://www.youtube.com' + vid['href']).startswith("https://www.youtube.com/watch?v="):
+        #            flag = 1
+        #            final_url = 'https://www.youtube.com' + vid['href']
+        #            url_list.append(final_url)url = url_list[0]
+        #    ydl_opts = {}os.chdir(path)
+        #    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        #        ydl.download([url])
+        #    vlc.play(path)if flag == 0:
+        #        GLaDOS('I have not found anything in Youtube ')
 
 #change wallpaper
 #    elif 'change wallpaper' in command:
@@ -260,7 +257,7 @@ def assistant(command):
         except Exception as e:
                 print(e)
                 GLaDOS(e)
-                GLaDOS('Hi User, I am Sofia and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
+                GLaDOS('Hi User, I am GLaDOS and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
 
 #loop to continue executing multiple commands
 while True:
