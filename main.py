@@ -1,5 +1,6 @@
 ########New Python Program
 ########main.py
+########GLaDOS
 
 import speech_recognition as sr
 import os
@@ -14,12 +15,16 @@ import youtube_dl
 #import vlc
 #import urllib
 #import urllib2
+import urllib.request
 import json
 from bs4 import BeautifulSoup as soup
 #from urllib2 import urlopen
+from urllib.request import urlopen
 #import wikipedia
 import random
 from time import strftime
+
+
 
 #convert text to speech
 def GLaDOS(audio):
@@ -27,6 +32,8 @@ def GLaDOS(audio):
     print(audio)
     for line in audio.splitlines():
         os.system("say " + audio)
+
+
 
 def myCommand():
     "listens for commands"
@@ -39,11 +46,14 @@ def myCommand():
     try:
         command = r.recognize_google(audio).lower()
         print('You said: ' + command + '\n')
+
     #loop back to continue to listen for commands if unrecognizable speech is received
     except sr.UnknownValueError:
         print('....')
         command = myCommand();
     return command
+
+
 
 def assistant(command):
     "if statements for executing commands"
@@ -60,6 +70,7 @@ def assistant(command):
     elif 'shutdown' in command:
         GLaDOS('Bye bye Sir. Have a nice day')
         sys.exit()
+
 
 #open website
     elif 'open' in command:
@@ -100,6 +111,7 @@ def assistant(command):
     #    """)
 
 
+
 #joke
     elif 'joke' in command:
         res = requests.get(
@@ -109,6 +121,7 @@ def assistant(command):
             GLaDOS(str(res.json()['joke']))
         else:
             GLaDOS('oops!I ran out of jokes')
+
 
 
 
@@ -142,6 +155,7 @@ def assistant(command):
 
 
 
+
 #time
     elif 'time' in command:
         import datetime
@@ -165,6 +179,7 @@ def assistant(command):
             GLaDOS('I don\'t know what you mean!')
 
 
+
 #launch any application
     elif 'launch' in command:
         reg_ex = re.search('launch (.*)', command)
@@ -178,7 +193,7 @@ def assistant(command):
 
 #play youtube song
 #    elif 'play me a song' in command:
-#        path = '/Users/nageshsinghchauhan/Documents/videos/'
+#        path = '~/Documents/videos/'
 #        folder = path
 #        for the_file in os.listdir(folder):
 #            file_path = os.path.join(folder, the_file)
@@ -193,7 +208,7 @@ def assistant(command):
 #        if mysong:
 #            flag = 0
 #            url = "https://www.youtube.com/results?search_query=" + mysong.replace(' ', '+')
-#            response = urllib2.urlopen(url)
+#            response = urlopen(url)
 #            html = response.read()
 #            soup1 = soup(html,"lxml")
 #            url_list = []
@@ -212,7 +227,7 @@ def assistant(command):
 #    elif 'change wallpaper' in command:
 
 #change user directory to your path of wishes (maybe the dark side xD)
-    #    folder = '/Users/nageshsinghchauhan/Documents/wallpaper/'
+    #    folder = '~/Documents/wallpaper/'
     #    for the_file in os.listdir(folder):
     #        file_path = os.path.join(folder, the_file)
     #        try:
@@ -225,7 +240,7 @@ def assistant(command):
 
 
 #pic from unspalsh.com
-    #    f = urllib2.urlopen(url)
+    #    f = urlopen(url)
     #    json_string = f.read()
     #    f.close()
     #    parsed_json = json.loads(json_string)
