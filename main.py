@@ -41,7 +41,7 @@ def myCommand():
         r.adjust_for_ambient_noise(source, duration=1)
         audio = r.listen(source)
     try:
-        command = r.recognize_google(audio).lower()
+        command = r.recognize_sphinx(audio).lower()
         print('You said: ' + command + '\n')
 
     #loop back to continue to listen for commands if unrecognizable speech is received
