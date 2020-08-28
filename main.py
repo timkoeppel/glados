@@ -17,8 +17,9 @@ import urllib.request
 import json
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen
-#import wikipedia
+import wikipedia
 import random
+import pocketsphinx
 from time import strftime
 
 
@@ -43,7 +44,7 @@ def myCommand():
         audio = r.listen(source)
     try:
 #        if  r.recognize_google(audio) == keyword:
-            command = r.recognize_google(audio).lower()
+            command = r.recognize_sphinx(audio).lower()
             print('You said: ' + command + '\n')
 
     #loop back to continue to listen for commands if unrecognizable speech is received
@@ -249,17 +250,17 @@ def assistant(command):
     #    GLaDOS('wallpaper changed successfully')
 
 #askme anything
-#    elif 'tell me about' in command:
-#        reg_ex = re.search('tell me about (.*)', command)
-#        try:
-#            if reg_ex:
-#                topic = reg_ex.group(1)
-#                ny = wikipedia.page(topic)
-#                GLaDOS(ny.content[:500].encode('utf-8'))
-#        except Exception as e:
-#                print(e)
-#                GLaDOS(e)
-#                GLaDOS('Hi User, I am GLaDOS and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
+    elif 'tell me about' in command:
+        reg_ex = re.search('tell me about (.*)', command)
+        try:
+            if reg_ex:
+                topic = reg_ex.group(1)
+                ny = wikipedia.page(topic)
+                GLaDOS(ny.content[:500].encode('utf-8'))
+        except Exception as e:
+                print(e)
+                GLaDOS(e)
+                GLaDOS('Hi User, I am GLaDOS and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
 
 #loop to continue executing multiple commands
 while True:
