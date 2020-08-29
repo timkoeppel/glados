@@ -21,7 +21,7 @@ import wikipedia
 import random
 import pocketsphinx
 from time import strftime
-
+import getpass
 
 
 #convert text to speech
@@ -31,6 +31,7 @@ def GLaDOS(audio):
     for line in audio.splitlines():
         os.system("say " + audio)
 
+username = getpass.getuser()
 
 
 def myCommand():
@@ -67,8 +68,9 @@ def assistant(command):
             url = url + 'r/' + subreddit
         webbrowser.open(url)
         GLaDOS('The Reddit content has been opened for you Sir.')
-    elif 'shutdown' in command:
-        GLaDOS('Bye bye Sir. Have a nice day')
+
+    elif 'shut down' in command:
+        GLaDOS('Bye bye ' + username + '. Have a nice day!')
         sys.exit()
 
 
@@ -80,7 +82,7 @@ def assistant(command):
             print(domain)
             url = 'https://www.' + domain
             webbrowser.open(url)
-            GLaDOS('The website you have requested has been opened for you Sir.')
+            GLaDOS('The website you have requested has been opened for you' + username + '.')
         else:
             pass
 
@@ -90,11 +92,11 @@ def assistant(command):
     elif 'hello' in command:
         day_time = int(strftime('%H'))
         if day_time < 12:
-            GLaDOS('Hello Sir. Good morning')
+            GLaDOS('Hello ' + username + '. Good morning')
         elif 12 <= day_time < 18:
-            GLaDOS('Hello Sir. Good afternoon')
+            GLaDOS('Hello ' + username + '. Good afternoon')
         else:
-            GLaDOS('Hello Sir. Good evening')
+            GLaDOS('Hello ' + username + '. Good evening')
         #elif 'help me' in command:
         #GLaDOS("""
         #You can use these commands and I'll help you out:1. Open reddit subreddit : Opens the subreddit in default browser.
@@ -260,7 +262,7 @@ def assistant(command):
         except Exception as e:
                 print(e)
                 GLaDOS(e)
-                GLaDOS('Hi User, I am GLaDOS and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
+                GLaDOS('Hi ' + username + ', I am GLaDOS and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
 
 #loop to continue executing multiple commands
 while True:
