@@ -24,12 +24,13 @@ from time import strftime
 import getpass
 
 
-#convert text to speech
+# convert text to speech
 def GLaDOS(audio):
     "speaks audio passed as argument"
     print(audio)
     for line in audio.splitlines():
         os.system("say " + audio)
+
 
 username = getpass.getuser()
 
@@ -51,15 +52,14 @@ def myCommand():
     #loop back to continue to listen for commands if unrecognizable speech is received
     except sr.UnknownValueError:
         print('....')
-        command = myCommand();
+        command = myCommand()
     return command
-
 
 
 def assistant(command):
     "if statements for executing commands"
 
-#open subreddit Reddit
+    # open subreddit Reddit
     if 'open reddit' in command:
         reg_ex = re.search('open reddit (.*)', command)
         url = 'https://www.reddit.com/'
@@ -74,7 +74,7 @@ def assistant(command):
         sys.exit()
 
 
-#open website
+    # open website
     elif 'open' in command:
         reg_ex = re.search('open (.+)', command)
         if reg_ex:
@@ -88,7 +88,7 @@ def assistant(command):
 
 
 
-#greetings
+    # greetings
     elif 'hello' in command:
         day_time = int(strftime('%H'))
         if day_time < 12:
@@ -97,24 +97,24 @@ def assistant(command):
             GLaDOS('Hello ' + username + '. Good afternoon')
         else:
             GLaDOS('Hello ' + username + '. Good evening')
-        #elif 'help me' in command:
-        #GLaDOS("""
-        #You can use these commands and I'll help you out:1. Open reddit subreddit : Opens the subreddit in default browser.
-    #    2. Open xyz.com : replace xyz with any website name
-    #    3. Send email/email : Follow up questions such as recipient name, content will be asked in order.
-    #    4. Current weather in {cityname} : Tells you the current condition and temperture
-    #    5. Hello
-    #    6. play me a video : Plays song in your VLC media player
-    #    7. change wallpaper : Change desktop wallpaper
-    #    8. news for today : reads top news of today
-    #    9. time : Current system time
-    #    10. top stories from google news (RSS feeds)
-    #    11. tell me about xyz : tells you about xyz
-    #    """)
+    #   elif 'help me' in command:
+    #      GLaDOS("""
+    #       You can use these commands and I'll help you out:1. Open reddit subreddit : Opens the subreddit in default browser.
+    #       2. Open xyz.com : replace xyz with any website name
+    #       3. Send email/email : Follow up questions such as recipient name, content will be asked in order.
+    #       4. Current weather in {cityname} : Tells you the current condition and temperture
+    #       5. Hello
+    #       6. play me a video : Plays song in your VLC media player
+    #       7. change wallpaper : Change desktop wallpaper
+    #       8. news for today : reads top news of today
+    #       9. time : Current system time
+    #       10. top stories from google news (RSS feeds)
+    #       11. tell me about xyz : tells you about xyz
+    #       """)
 
 
 
-#joke
+    # joke
     elif 'joke' in command:
         res = requests.get(
                 'https://icanhazdadjoke.com/',
@@ -127,19 +127,19 @@ def assistant(command):
 
 
 
-#top stories from google news
-    elif 'news for today' in command:
+    # top stories from google news
+    elif 'news' in command:
         try:
-            news_url="https://news.google.com/news/rss"
-            Client=urlopen(news_url)
-            xml_page=Client.read()
-            Client.close()
-            soup_page=soup(xml_page,"xml")
-            news_list=soup_page.findAll("item")
+            news_url = "https://news.google.com/news/rss"
+            client = urlopen(news_url)
+            xml_page = client.read()
+            client.close()
+            soup_page = soup(xml_page,"xml")
+            news_list = soup_page.findAll("item")
             for news in news_list[:15]:
                 GLaDOS(news.title.text.encode('utf-8'))
         except Exception as e:
-                print(e)
+            print(e)
 
 
 
@@ -148,12 +148,15 @@ def assistant(command):
         reg_ex = re.search('current weather in (.*)', command)
         if reg_ex:
             city = reg_ex.group(1)
-            owm = OWM(API_key='ab0d5e80e8dafb2cb81fa9e82431c1fa')
+            owm = OWM('ab0d5e80e8dafb2cb81fa9e82431c1fa')
             obs = owm.weather_at_place(city)
             w = obs.get_weather()
             k = w.get_status()
             x = w.get_temperature(unit='celsius')
-            GLaDOS('Current weather in %s is %s. The maximum temperature is %0.2f and the minimum temperature is %0.2f degree celcius' % (city, k, x['temp_max'], x['temp_min']))
+            GLaDOS('Current weather in %s is %s. '
+                   'The maximum temperature is %0.2f and '
+                   'the minimum temperature is %0.2f degree celcius'
+                   % (city, k, x['temp_max'], x['temp_min']))
 
 
 
@@ -237,7 +240,7 @@ def assistant(command):
     #                os.unlink(file_path)
     #        except Exception as e:
     #            print(e)
-    #    api_key = 'fd66364c0ad9e0f8aabe54ec3cfbed0a947f3f4014ce3b841bf2ff6e20948795'
+    #   api_key = 'fd66364c0ad9e0f8aabe54ec3cfbed0a947f3f4014ce3b841bf2ff6e20948795'
     #    url = 'https://api.unsplash.com/photos/random?client_id=' + api_key
 
 
