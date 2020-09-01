@@ -22,7 +22,13 @@ import random
 import pocketsphinx
 from time import strftime
 import getpass
+import pyttsx3
+import engineio
 
+
+
+engineio = pyttsx3.init()
+engineio.setProperty('rate',50)
 
 #convert text to speech
 def GLaDOS(audio):
@@ -45,7 +51,7 @@ def myCommand():
         audio = r.listen(source)
     try:
 #        if  r.recognize_google(audio) == keyword:
-            command = r.recognize_sphinx(audio).lower()
+            command = r.recognize_google(audio).lower()
             print('You said: ' + command + '\n')
 
     #loop back to continue to listen for commands if unrecognizable speech is received
@@ -67,9 +73,14 @@ def assistant(command):
             subreddit = reg_ex.group(1)
             url = url + 'r/' + subreddit
         webbrowser.open(url)
-        GLaDOS('The Reddit content has been opened for you Sir.')
+        GLaDOS('The Reddit content has been opened for you ' + username +'.')
+        engineio.say("The Reddit content has been opened for you" + username)
+        engineio.runAndWait();
+
 
     elif 'shut down' in command:
+        engineio.say("Bye Bye" + username + " Have a nice day")
+        engineio.runAndWait();
         GLaDOS('Bye bye ' + username + '. Have a nice day!')
         sys.exit()
 
@@ -83,6 +94,8 @@ def assistant(command):
             url = 'https://www.' + domain
             webbrowser.open(url)
             GLaDOS('The website you have requested has been opened for you' + username + '.')
+            engineio.say("The website you have requested has been opened for you" + username)
+            engineio.runAndWait();
         else:
             pass
 
@@ -93,10 +106,16 @@ def assistant(command):
         day_time = int(strftime('%H'))
         if day_time < 12:
             GLaDOS('Hello ' + username + '. Good morning')
+            engineio.say("Hello " + username + " Good morning")
+            engineio.runAndWait();
         elif 12 <= day_time < 18:
             GLaDOS('Hello ' + username + '. Good afternoon')
+            engineio.say("Hello " + username + " Good afternoon")
+            engineio.runAndWait();
         else:
             GLaDOS('Hello ' + username + '. Good evening')
+            engineio.say("Hello " + username + " Good evening")
+            engineio.runAndWait();
         #elif 'help me' in command:
         #GLaDOS("""
         #You can use these commands and I'll help you out:1. Open reddit subreddit : Opens the subreddit in default browser.
@@ -123,6 +142,8 @@ def assistant(command):
             GLaDOS(str(res.json()['joke']))
         else:
             GLaDOS('oops!I ran out of jokes')
+            engineio.say("oops!I ran out of jokes")
+            engineio.runAndWait();
 
 
 
