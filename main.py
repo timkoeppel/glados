@@ -24,20 +24,22 @@ from time import strftime
 import getpass
 import pyttsx3
 import engineio
+import lxml
 
 
-
+# engineio
 engineio = pyttsx3.init()
 engineio.setProperty('rate',50)
 
-#convert text to speech
+# Get username of device
+username = getpass.getuser()
+
+# convert text to speech
 def GLaDOS(audio):
     "speaks audio passed as argument"
     print(audio)
     for line in audio.splitlines():
         os.system("say " + audio)
-
-username = getpass.getuser()
 
 
 def myCommand():
@@ -74,7 +76,7 @@ def assistant(command):
             url = url + 'r/' + subreddit
         webbrowser.open(url)
         GLaDOS('The Reddit content has been opened for you ' + username +'.')
-        engineio.say("The Reddit content has been opened for you" + username)
+        engineio.say("The Reddit content has been opened for you " + username)
         engineio.runAndWait();
 
 
@@ -93,8 +95,8 @@ def assistant(command):
             print(domain)
             url = 'https://www.' + domain
             webbrowser.open(url)
-            GLaDOS('The website you have requested has been opened for you' + username + '.')
-            engineio.say("The website you have requested has been opened for you" + username)
+            GLaDOS('The website you have requested has been opened for you ' + username + '.')
+            engineio.say("The website you have requested has been opened for you " + username + '.')
             engineio.runAndWait();
         else:
             pass
@@ -143,7 +145,7 @@ def assistant(command):
         else:
             GLaDOS('oops!I ran out of jokes')
             engineio.say("oops!I ran out of jokes")
-            engineio.runAndWait();
+            engineio.runAndWait()
 
 
 
@@ -152,13 +154,13 @@ def assistant(command):
     elif 'news for today' in command:
         try:
             news_url="https://news.google.com/news/rss"
-            Client=urlopen(news_url)
-            xml_page=Client.read()
-            Client.close()
-            soup_page=soup(xml_page,"xml")
-            news_list=soup_page.findAll("item")
+            client = urlopen(news_url)
+            xml_page = client.read()
+            client.close()
+            soup_page = soup(xml_page, "xml")
+            news_list = soup_page.findAll("item")
             for news in news_list[:15]:
-                GLaDOS(news.title.text.encode('utf-8'))
+                GLaDOS(news.title.text.encode('ascii'))
         except Exception as e:
                 print(e)
 
@@ -169,11 +171,12 @@ def assistant(command):
         reg_ex = re.search('current weather in (.*)', command)
         if reg_ex:
             city = reg_ex.group(1)
-            owm = OWM(API_key='ab0d5e80e8dafb2cb81fa9e82431c1fa')
-            obs = owm.weather_at_place(city)
-            w = obs.get_weather()
-            k = w.get_status()
-            x = w.get_temperature(unit='celsius')
+            owm = OWM('ab0d5e80e8dafb2cb81fa9e82431c1fa')
+            mgr = owm.weather_manager()
+            obs = mgr.weather_at_place(city)
+            w = obs.weather
+            k = w.status
+            x = w.temperature(unit='celsius')
             GLaDOS('Current weather in %s is %s. The maximum temperature is %0.2f and the minimum temperature is %0.2f degree celcius' % (city, k, x['temp_max'], x['temp_min']))
 
 
