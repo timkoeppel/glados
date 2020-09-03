@@ -26,7 +26,7 @@ import engineio
 import lxml
 
 import weather
-
+import joke
 
 # engineio
 engineio = pyttsx3.init()
@@ -138,15 +138,7 @@ def assistant(command):
 
 #joke
     elif 'joke' in command:
-        res = requests.get(
-                'https://icanhazdadjoke.com/',
-                headers={"Accept":"application/json"})
-        if res.status_code == requests.codes.ok:
-            GLaDOS(str(res.json()['joke']))
-        else:
-            GLaDOS('oops!I ran out of jokes')
-            engineio.say("oops!I ran out of jokes")
-            engineio.runAndWait()
+        GLaDOS(joke.badjoke())
 
 
 #top stories from google news
