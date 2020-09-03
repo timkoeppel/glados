@@ -10,23 +10,17 @@ import webbrowser
 import smtplib
 import requests
 import subprocess
-import youtube_dl
 #import vlc
-import urllib.request
-import json
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen
 import wikipedia
-import random
-import pocketsphinx
 from time import strftime
 import getpass
 import pyttsx3
 import engineio
-import lxml
 
-import weather
-
+# Function Imports
+from instructions import weather
 
 # engineio
 engineio = pyttsx3.init()
