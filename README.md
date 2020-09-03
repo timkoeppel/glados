@@ -14,5 +14,3 @@ Mac:
 
 Windows:
         -SAPI5
-
-Hallo das ist ein Test. Autor Tobi
