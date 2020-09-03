@@ -10,7 +10,6 @@ import webbrowser
 import smtplib
 import requests
 import subprocess
-from pyowm import OWM
 import youtube_dl
 #import vlc
 import urllib.request
@@ -26,6 +25,8 @@ import pyttsx3
 import engineio
 import lxml
 
+import weather
+
 
 # engineio
 engineio = pyttsx3.init()
@@ -39,7 +40,7 @@ def GLaDOS(audio):
     "speaks audio passed as argument"
     print(audio)
     for line in audio.splitlines():
-        os.system("say " + audio)
+        os.system(audio)
 
 
 def myCommand():
@@ -59,7 +60,7 @@ def myCommand():
     #loop back to continue to listen for commands if unrecognizable speech is received
     except sr.UnknownValueError:
         print('....')
-        command = myCommand();
+        command = myCommand()
     return command
 
 
@@ -77,12 +78,12 @@ def assistant(command):
         webbrowser.open(url)
         GLaDOS('The Reddit content has been opened for you ' + username +'.')
         engineio.say("The Reddit content has been opened for you " + username)
-        engineio.runAndWait();
+        engineio.runAndWait()
 
 
     elif 'shut down' in command:
         engineio.say("Bye Bye" + username + " Have a nice day")
-        engineio.runAndWait();
+        engineio.runAndWait()
         GLaDOS('Bye bye ' + username + '. Have a nice day!')
         sys.exit()
 
@@ -97,7 +98,7 @@ def assistant(command):
             webbrowser.open(url)
             GLaDOS('The website you have requested has been opened for you ' + username + '.')
             engineio.say("The website you have requested has been opened for you " + username + '.')
-            engineio.runAndWait();
+            engineio.runAndWait()
         else:
             pass
 
@@ -109,15 +110,15 @@ def assistant(command):
         if day_time < 12:
             GLaDOS('Hello ' + username + '. Good morning')
             engineio.say("Hello " + username + " Good morning")
-            engineio.runAndWait();
+            engineio.runAndWait()
         elif 12 <= day_time < 18:
             GLaDOS('Hello ' + username + '. Good afternoon')
             engineio.say("Hello " + username + " Good afternoon")
-            engineio.runAndWait();
+            engineio.runAndWait()
         else:
             GLaDOS('Hello ' + username + '. Good evening')
             engineio.say("Hello " + username + " Good evening")
-            engineio.runAndWait();
+            engineio.runAndWait()
         #elif 'help me' in command:
         #GLaDOS("""
         #You can use these commands and I'll help you out:1. Open reddit subreddit : Opens the subreddit in default browser.
@@ -148,8 +149,6 @@ def assistant(command):
             engineio.runAndWait()
 
 
-
-
 #top stories from google news
     elif 'news for today' in command:
         try:
@@ -159,28 +158,16 @@ def assistant(command):
             client.close()
             soup_page = soup(xml_page, "xml")
             news_list = soup_page.findAll("item")
-            for news in news_list[:15]:
-                GLaDOS(news.title.text.encode('ascii'))
+            for news in news_list[:5]:
+                GLaDOS(news.title.text.encode('utf-8'))
         except Exception as e:
-                print(e)
+            print(e)
 
 
 
-#current weather
+# current weather in weather.py
     elif 'current weather' in command:
-        reg_ex = re.search('current weather in (.*)', command)
-        if reg_ex:
-            city = reg_ex.group(1)
-            owm = OWM('ab0d5e80e8dafb2cb81fa9e82431c1fa')
-            mgr = owm.weather_manager()
-            obs = mgr.weather_at_place(city)
-            w = obs.weather
-            k = w.status
-            x = w.temperature(unit='celsius')
-            GLaDOS('Current weather in %s is %s. The maximum temperature is %0.2f and the minimum temperature is %0.2f degree celcius' % (city, k, x['temp_max'], x['temp_min']))
-
-
-
+        GLaDOS(weather.currentWeather(re.search('current weather in (.*)', command)))
 
 #time
     elif 'time' in command:
@@ -282,7 +269,7 @@ def assistant(command):
             if reg_ex:
                 topic = reg_ex.group(1)
                 ny = wikipedia.page(topic)
-                GLaDOS(ny.content[:500].encode('utf-8'))
+                GLaDOS(str(ny.content[:500].encode('utf-8')))
         except Exception as e:
                 print(e)
                 GLaDOS(e)
