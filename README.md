@@ -5,12 +5,12 @@ GLaDOS is a speech-recognition software designed by Tim Koeppel and Tobias Ernst
 
 For using the pyttsx3 text-to-speech library, make sure that the following packages are installed:
 
-Linux:
-        -espeak
-        -ffmpeg
+##Linux:
+    espeak
+    ffmpeg
 
-Mac:    
-        -NSSpeechSynthesizer
+##Mac:    
+    NSSpeechSynthesizer
 
-Windows:
-        -SAPI5
+##Windows:
+    SAPI5

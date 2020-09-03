@@ -8,7 +8,6 @@ import sys
 import re
 import webbrowser
 import smtplib
-import requests
 import subprocess
 #import vlc
 from bs4 import BeautifulSoup as soup
@@ -20,7 +19,7 @@ import pyttsx3
 import engineio
 
 # Function Imports
-from instructions import weather
+from abilities import weather, joke
 
 # engineio
 engineio = pyttsx3.init()
@@ -132,15 +131,7 @@ def assistant(command):
 
 #joke
     elif 'joke' in command:
-        res = requests.get(
-                'https://icanhazdadjoke.com/',
-                headers={"Accept":"application/json"})
-        if res.status_code == requests.codes.ok:
-            GLaDOS(str(res.json()['joke']))
-        else:
-            GLaDOS('oops!I ran out of jokes')
-            engineio.say("oops!I ran out of jokes")
-            engineio.runAndWait()
+        GLaDOS(joke.badjoke())
 
 
 #top stories from google news
