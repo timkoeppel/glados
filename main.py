@@ -1,25 +1,20 @@
-########New Python Program
-########main.py
-########GLaDOS
+# GLaDOS
 
+# Audio/Speech Imports
 import speech_recognition as sr
-import os
 import sys
 import re
-import webbrowser
 import smtplib
-import subprocess
 #import vlc
-from bs4 import BeautifulSoup as soup
-from urllib.request import urlopen
-import wikipedia
 from time import strftime
 import getpass
 import pyttsx3
 import engineio
 
-# Function Imports
-from abilities import weather, joke
+# Abilities Imports
+from abilities import website, reddit, weather, \
+    joke, news, application, knowledge
+
 
 # engineio
 engineio = pyttsx3.init()
@@ -28,138 +23,88 @@ engineio.setProperty('rate',50)
 # Get username of device
 username = getpass.getuser()
 
+
 # convert text to speech
 def GLaDOS(audio):
-    "speaks audio passed as argument"
+    """speaks audio passed as argument"""
     print(audio)
     for line in audio.splitlines():
-        os.system(audio)
+        engineio.say(audio)
+        engineio.runAndWait()
 
 
+# Commands
 def myCommand():
-    "listens for commands"
+    """listens for commands"""
     r = sr.Recognizer()
-#    keyword = "hello"       ##keyword to wake from sleeping mode
+    # keyword = "hello"       ##keyword to wake from sleeping mode
     with sr.Microphone() as source:
         print('Say something...')
         r.pause_threshold = 1
         r.adjust_for_ambient_noise(source, duration=1)
         audio = r.listen(source)
     try:
-#        if  r.recognize_google(audio) == keyword:
-            command = r.recognize_google(audio).lower()
-            print('You said: ' + command + '\n')
+        # if r.recognize_google(audio) == keyword:
+        command = r.recognize_google(audio).lower()
+        print('You said: ' + command + '\n')
 
-    #loop back to continue to listen for commands if unrecognizable speech is received
+    # loop back to continue to listen for commands if unrecognizable speech is received
     except sr.UnknownValueError:
         print('....')
         command = myCommand()
     return command
 
 
-
+# Assistant
 def assistant(command):
-    "if statements for executing commands"
+    """if statements for executing commands"""
 
-#open subreddit Reddit
-    if 'open reddit' in command:
-        reg_ex = re.search('open reddit (.*)', command)
-        url = 'https://www.reddit.com/'
-        if reg_ex:
-            subreddit = reg_ex.group(1)
-            url = url + 'r/' + subreddit
-        webbrowser.open(url)
-        GLaDOS('The Reddit content has been opened for you ' + username +'.')
-        engineio.say("The Reddit content has been opened for you " + username)
-        engineio.runAndWait()
-
-
-    elif 'shut down' in command:
-        engineio.say("Bye Bye" + username + " Have a nice day")
-        engineio.runAndWait()
-        GLaDOS('Bye bye ' + username + '. Have a nice day!')
-        sys.exit()
-
-
-#open website
-    elif 'open' in command:
-        reg_ex = re.search('open (.+)', command)
-        if reg_ex:
-            domain = reg_ex.group(1)
-            print(domain)
-            url = 'https://www.' + domain
-            webbrowser.open(url)
-            GLaDOS('The website you have requested has been opened for you ' + username + '.')
-            engineio.say("The website you have requested has been opened for you " + username + '.')
-            engineio.runAndWait()
-        else:
-            pass
-
-
-
-#greetings
-    elif 'hello' in command:
+    # GREETINGS
+    if 'hello' in command:
         day_time = int(strftime('%H'))
         if day_time < 12:
             GLaDOS('Hello ' + username + '. Good morning')
-            engineio.say("Hello " + username + " Good morning")
-            engineio.runAndWait()
         elif 12 <= day_time < 18:
             GLaDOS('Hello ' + username + '. Good afternoon')
-            engineio.say("Hello " + username + " Good afternoon")
-            engineio.runAndWait()
         else:
             GLaDOS('Hello ' + username + '. Good evening')
-            engineio.say("Hello " + username + " Good evening")
-            engineio.runAndWait()
-        #elif 'help me' in command:
-        #GLaDOS("""
-        #You can use these commands and I'll help you out:1. Open reddit subreddit : Opens the subreddit in default browser.
-    #    2. Open xyz.com : replace xyz with any website name
-    #    3. Send email/email : Follow up questions such as recipient name, content will be asked in order.
-    #    4. Current weather in {cityname} : Tells you the current condition and temperture
-    #    5. Hello
-    #    6. play me a video : Plays song in your VLC media player
-    #    7. change wallpaper : Change desktop wallpaper
-    #    8. news for today : reads top news of today
-    #    9. time : Current system time
-    #    10. top stories from google news (RSS feeds)
-    #    11. tell me about xyz : tells you about xyz
-    #    """)
 
+    # SHUTDOWN
+    elif 'shut down' in command:
+        GLaDOS('Bye bye ' + username + '. Have a nice day!')
+        sys.exit()
 
+    # WEBSITE
+    elif 'open' in command:
+        GLaDOS(website.openWebsite(re.search('open (.+)', command)) + username)
 
-#joke
+    # REDDIT
+    elif 'open reddit' in command:
+        GLaDOS(reddit.openSubreddit(re.search('open reddit (.*)', command)) + username)
+
+    # JOKE
     elif 'joke' in command:
-        GLaDOS(joke.badjoke())
+        GLaDOS(joke.badJoke())
 
-
-#top stories from google news
+    # NEWS
     elif 'news for today' in command:
-        try:
-            news_url="https://news.google.com/news/rss"
-            client = urlopen(news_url)
-            xml_page = client.read()
-            client.close()
-            soup_page = soup(xml_page, "xml")
-            news_list = soup_page.findAll("item")
-            for news in news_list[:5]:
-                GLaDOS(news.title.text.encode('utf-8'))
-        except Exception as e:
-            print(e)
+        GLaDOS(news.getNews())
 
-
-
-# current weather in weather.py
+    # WEATHER
     elif 'current weather' in command:
         GLaDOS(weather.currentWeather(re.search('current weather in (.*)', command)))
 
-#time
+    # TIME
     elif 'time' in command:
         import datetime
         now = datetime.datetime.now()
         GLaDOS('Current time is %d hours %d minutes' % (now.hour, now.minute))
 
+    # APPLICATION
+    elif 'launch' in command:
+        GLaDOS(application.launchApp(re.search('launch (.*)', command)) + username)
+
+    # E-MAIL
     elif 'email' in command:
         GLaDOS('Who is the recipient?')
         recipient = myCommand()
@@ -176,20 +121,12 @@ def assistant(command):
         else:
             GLaDOS('I don\'t know what you mean!')
 
+    # KNOWLEDGE
+    elif 'tell me about' in command:
+        GLaDOS(knowledge.citeWikipedia(re.search('tell me about (.*)', command)) + username)
 
 
-#launch any application
-    elif 'launch' in command:
-        reg_ex = re.search('launch (.*)', command)
-        if reg_ex:
-            appname = reg_ex.group(1)
-            appname1 = appname+".app"
-            subprocess.Popen(["open", "-n", "/Applications/" + appname1], stdout=subprocess.PIPE)
-
-            GLaDOS('I have launched the desired application')
-
-
-#play youtube song
+    # YOUTUBE
     #elif 'play me a song' in command:
     #    path = '~/Documents/videos/'
     #    folder = path
@@ -221,11 +158,11 @@ def assistant(command):
         #    vlc.play(path)if flag == 0:
         #        GLaDOS('I have not found anything in Youtube ')
 
-#change wallpaper
-#    elif 'change wallpaper' in command:
+    # WALLPAPER
+    # elif 'change wallpaper' in command:
 
 #change user directory to your path of wishes (maybe the dark side xD)
-    #    folder = '~/Documents/wallpaper/'
+    #    folder = '~/Documents/Pictures/'
     #    for the_file in os.listdir(folder):
     #        file_path = os.path.join(folder, the_file)
     #        try:
@@ -247,19 +184,7 @@ def assistant(command):
     #    subprocess.call(["killall Dock"], shell=True)
     #    GLaDOS('wallpaper changed successfully')
 
-#askme anything
-    elif 'tell me about' in command:
-        reg_ex = re.search('tell me about (.*)', command)
-        try:
-            if reg_ex:
-                topic = reg_ex.group(1)
-                ny = wikipedia.page(topic)
-                GLaDOS(str(ny.content[:500].encode('utf-8')))
-        except Exception as e:
-                print(e)
-                GLaDOS(e)
-                GLaDOS('Hi ' + username + ', I am GLaDOS and I am your personal voice assistant, Please give a command or say "help me" and I will tell you what all I can do for you.')
-
-#loop to continue executing multiple commands
+# loop to continue executing multiple commands
 while True:
     assistant(myCommand())
+
