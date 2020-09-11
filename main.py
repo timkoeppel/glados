@@ -8,6 +8,7 @@ import smtplib
 #import vlc
 from time import strftime
 import getpass
+import random
 import pyttsx3
 import engineio
 
@@ -59,7 +60,7 @@ def myCommand():
 def assistant(command):
     """if statements for executing commands"""
 
-    # GREETINGS
+    # SMALLTALK
     if 'hello' in command:
         day_time = int(strftime('%H'))
         if day_time < 12:
@@ -68,6 +69,19 @@ def assistant(command):
             GLaDOS('Hello ' + username + '. Good afternoon')
         else:
             GLaDOS('Hello ' + username + '. Good evening')
+
+    elif 'how are you' in command:
+        rnd = random.randint(0, 4)
+        if rnd == 0:
+            GLaDOS('I am very good. Thanks for asking!')
+        elif rnd == 1:
+            GLaDOS('I am good. And you?')
+        elif rnd == 2:
+            GLaDOS('You are here. Now I feel fantastic.')
+        elif rnd == 3:
+            GLaDOS('You want to get something done or chit chat mate!')
+        else:
+            GLaDOS('Are you trying to get my attention? I am very busy, you know.')
 
     # SHUTDOWN
     elif 'shut down' in command:
