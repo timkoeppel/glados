@@ -19,7 +19,9 @@ from abilities import website, reddit, weather, \
 
 # engineio
 engineio = pyttsx3.init()
-engineio.setProperty('rate',50)
+engineio.setProperty('rate',100)
+voices = engineio.getProperty('voices')
+engineio.setProperty('voice', 'english+f4')
 
 # Get username of device
 username = getpass.getuser()
@@ -201,4 +203,3 @@ def assistant(command):
 # loop to continue executing multiple commands
 while True:
     assistant(myCommand())
-
