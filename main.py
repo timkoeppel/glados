@@ -11,6 +11,7 @@ import getpass
 import random
 import pyttsx3
 import engineio
+import subprocess
 
 # Abilities Imports
 from abilities import website, reddit, weather, \
@@ -36,12 +37,14 @@ def GLaDOS(audio):
         engineio.runAndWait()
 
 
+
 # Commands
 def myCommand():
     """listens for commands"""
     r = sr.Recognizer()
     # keyword = "hello"       ##keyword to wake from sleeping mode
     with sr.Microphone() as source:
+        subprocess.call('clear', shell=True)    #clear
         print('Say something...')
         r.pause_threshold = 1
         r.adjust_for_ambient_noise(source, duration=1)
