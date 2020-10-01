@@ -13,7 +13,7 @@ def getNews():
         soup_page = Soup(xml_page, "xml")
         news_list = soup_page.findAll("item")
         for news in news_list[:5]:
-            result = result + news.title.text.encode('utf-8')
+            result = result + str(news.title.text.encode('utf-8'))[1:] + '.\n'
         return result
     except Exception as e:
         print(e)
