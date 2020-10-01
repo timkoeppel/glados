@@ -148,65 +148,6 @@ def assistant(command):
     elif 'tell me about' in command:
         GLaDOS(knowledge.citeWikipedia(re.search('tell me about (.*)', command)) + username)
 
-
-    # YOUTUBE
-    #elif 'play me a song' in command:
-    #    path = '~/Documents/videos/'
-    #    folder = path
-    #    for the_file in os.listdir(folder):
-        #    file_path = os.path.join(folder, the_file)
-        #    try:
-        #        if os.path.isfile(file_path):
-        #            os.unlink(file_path)
-        #    except Exception as e:
-        #        print(e)
-
-    #GLaDOS('What song shall I play Sir?')
-        #mysong = myCommand()
-        #if mysong:
-        #    flag = 0
-        #    url = "https://www.youtube.com/results?search_query=" + mysong.replace(' ', '+')
-        #    response = urlopen(url)
-        #    html = response.read()
-        #    soup1 = soup(html,"lxml")
-        #    url_list = []
-        #    for vid in soup1.findAll(attrs={'class':'yt-uix-tile-link'}):
-        #        if ('https://www.youtube.com' + vid['href']).startswith("https://www.youtube.com/watch?v="):
-        #            flag = 1
-        #            final_url = 'https://www.youtube.com' + vid['href']
-        #            url_list.append(final_url)url = url_list[0]
-        #    ydl_opts = {}os.chdir(path)
-        #    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        #        ydl.download([url])
-        #    vlc.play(path)if flag == 0:
-        #        GLaDOS('I have not found anything in Youtube ')
-
-    # WALLPAPER
-    # elif 'change wallpaper' in command:
-
-#change user directory to your path of wishes (maybe the dark side xD)
-    #    folder = '~/Documents/Pictures/'
-    #    for the_file in os.listdir(folder):
-    #        file_path = os.path.join(folder, the_file)
-    #        try:
-    #            if os.path.isfile(file_path):
-    #                os.unlink(file_path)
-    #        except Exception as e:
-    #            print(e)
-    #    api_key = 'fd66364c0ad9e0f8aabe54ec3cfbed0a947f3f4014ce3b841bf2ff6e20948795'
-    #    url = 'https://api.unsplash.com/photos/random?client_id=' + api_key
-
-
-#pic from unspalsh.com
-    #    f = urlopen(url)
-    #    json_string = f.read()
-    #    f.close()
-    #    parsed_json = json.loads(json_string)
-    #    photo = parsed_json['urls']['full']
-    #    urllib.urlretrieve(photo, "/Users/nageshsinghchauhan/Documents/wallpaper/a") # Location where we download the image to.
-    #    subprocess.call(["killall Dock"], shell=True)
-    #    GLaDOS('wallpaper changed successfully')
-
 # loop to continue executing multiple commands
 while True:
     assistant(myCommand())
